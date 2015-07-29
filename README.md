@@ -1,10 +1,10 @@
 # MTLazy.js
 
-A small, fast, modern, and dependency-free library for lazy loading. This is a fork of Layzr.js bringing in ie9 support and some other features we needed for service projects at MT.
+A small, fast, modern, and dependency-free library for lazy loading. This is a fork of Layzr.js bringing in ie9 support and some other features we needed for service projects at MT. 
 
 Lazy loading boosts page speed by deferring the loading of images until they're in (or near) the viewport. This library makes it completely painless - maximizing speed by keeping options to a minimum.
 
-* [Demo Page](http://callmecavs.github.io/layzr.js/)
+Check the demo directory for an example.
 
 ## Usage
 
