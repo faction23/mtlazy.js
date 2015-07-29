@@ -38,6 +38,9 @@ function Mtlazy(options) {
   this._retina  = window.devicePixelRatio > 1;
   this._srcAttr = this._retina ? this._optionsAttrRetina : this._optionsAttr;
 
+  // inject polyfill for ie9
+  this.rafPolyfill();
+
   // nodelist
   this._nodes = document.querySelectorAll(this._optionsSelector);
 
@@ -146,6 +149,34 @@ Mtlazy.prototype._reveal = function(node) {
 Mtlazy.prototype.updateSelector = function() {
   // update cached list of nodes matching selector
   this._nodes = document.querySelectorAll(this._optionsSelector);
+};
+
+Mtlazy.prototype.rafPolyfill = function () {
+  if (!Date.now)
+    Date.now = function () {
+      return new Date().getTime();
+    };
+
+  var vendors = ['webkit', 'moz'];
+  for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
+    var vp = vendors[i];
+    window.requestAnimationFrame = window[vp + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame = (window[vp + 'CancelAnimationFrame']
+    || window[vp + 'CancelRequestAnimationFrame']);
+  }
+  if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
+    || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+    var lastTime = 0;
+    window.requestAnimationFrame = function (callback) {
+      var now = Date.now();
+      var nextTime = Math.max(lastTime + 16, now);
+      return setTimeout(function () {
+          callback(lastTime = nextTime);
+        },
+        nextTime - now);
+    };
+    window.cancelAnimationFrame = clearTimeout;
+  }
 };
 
 Mtlazy.prototype.update = function() {
