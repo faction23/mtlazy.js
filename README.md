@@ -80,7 +80,7 @@ Removing this attribute _will not load the image_ - the user will still need to 
 Create a new instance, and that's it!
 
 ```javascript
-var MTLazy = new Mtlazy();
+var mtlazy = new Mtlazy();
 ```
 
 Documentation for all options follows:
@@ -94,7 +94,7 @@ var mtlazy = new Mtlazy({
   container: null,
   selector: '[data-src]',
   attr: 'data-src',
-  retinaAttr: 'data-src-retina',
+  retinaAttr: 'data-retina-src',
   bgAttr: 'data-bg-src',
   hiddenAttr: 'data-hidden-src',
   threshold: 0,
