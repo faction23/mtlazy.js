@@ -1,6 +1,6 @@
 /*!
- * Mtlazy.js 2.0.0 - A small, fast, modern, and dependency-free library for lazy loading. Forked from callmecavs layzr.
- * Copyright (c) 2015 Michael Cavalea, Samuel Estok - http://callmecavs.github.io/layzr.js/
+ * Mtlazy.js 2.0.1 - A small, fast, modern, and dependency-free library for lazy loading. Forked from callmecavs layzr.
+ * Copyright (c) 2015 Michael Cavalea - http://callmecavs.github.io/layzr.js/
  * License: MIT
  */
 
@@ -25,14 +25,16 @@ function Mtlazy(options) {
   // options
   options = options || {};
 
-  this._optionsContainer  = document.querySelector(options.container) || window;
-  this._optionsSelector   = options.selector || '.lazyload';
-  this._optionsAttr       = options.attr || 'data-src';
-  this._optionsAttrRetina = options.retinaAttr || 'data-retina-src';
-  this._optionsAttrBg     = options.bgAttr || 'data-bg-src';
-  this._optionsAttrHidden = options.hiddenAttr || 'data-hidden-src';
-  this._optionsThreshold  = options.threshold || 0;
-  this._optionsCallback   = options.callback || null;
+  this._optionsContainer    = document.querySelector(options.container) || window;
+  this._optionsFade         = options.fade || false;
+  this._optionsFadeDuration = options.duration || 300;
+  this._optionsSelector     = options.selector || '.lazyload';
+  this._optionsAttr         = options.attr || 'data-src';
+  this._optionsAttrRetina   = options.retinaAttr || 'data-retina-src';
+  this._optionsAttrBg       = options.bgAttr || 'data-bg-src';
+  this._optionsAttrHidden   = options.hiddenAttr || 'data-hidden-src';
+  this._optionsThreshold    = options.threshold || 0;
+  this._optionsCallback     = options.callback || null;
 
   // properties
   this._retina  = window.devicePixelRatio > 1;
@@ -84,13 +86,28 @@ Mtlazy.prototype._getOffset = function(node) {
 Mtlazy.prototype._getContainerHeight = function() {
   return this._optionsContainer.innerHeight
       || this._optionsContainer.offsetHeight;
-}
+};
 
 // Mtlazy METHODS
 
 Mtlazy.prototype._create = function() {
   // fire scroll event once
   this._handlerBind();
+
+  // if fade set them to opacity 0
+  if( this._optionsFade ){
+    var nodes = this._nodes;
+    var dur = this._optionsFadeDuration;
+    for ( var i = 0; i < nodes.length; i++ ) {
+      nodes[i].style.opacity = 0;
+      nodes[i].style.WebkitTransition =
+        nodes[i].style.MozTransition =
+          nodes[i].style.OTransition =
+            nodes[i].style.MsTransition =
+              nodes[i].style.transition =
+                'opacity ' + dur + 'ms ease-in';
+    }
+  }
 
   // bind scroll and resize event
   this._optionsContainer.addEventListener('scroll', this._handlerBind, false);
@@ -144,6 +161,13 @@ Mtlazy.prototype._reveal = function(node) {
   node.removeAttribute(this._optionsAttrRetina);
   node.removeAttribute(this._optionsAttrBg);
   node.removeAttribute(this._optionsAttrHidden);
+
+  if( this._optionsFade ){
+    setTimeout( function(){
+      node.style.opacity = 1;
+    }, 150 );
+  }
+
 };
 
 Mtlazy.prototype.updateSelector = function() {

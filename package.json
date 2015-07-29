@@ -1,11 +1,11 @@
 {
-  "name":        "mtlazy.js",
-  "version":     "2.0.0",
+  "name":        "mtlazy",
+  "version":     "2.0.1",
   "description": "A small, fast, modern, and dependency-free library for lazy loading. Forked from callmecavs layzr.",
   "homepage":    "https://github.com/faction23/mtlazy.js",
   "main":        "dist/mtlazy.js",
 
-  "author":  "Michael Cavalea, Samuel Estok",
+  "author":  "Michael Cavalea",
   "license": "MIT",
 
   "repository": {

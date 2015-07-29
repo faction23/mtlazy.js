@@ -92,6 +92,8 @@ Defaults shown below:
 ```javascript
 var mtlazy = new Mtlazy({
   container: null,
+  fade: false,
+  duration: 300,
   selector: '[data-src]',
   attr: 'data-src',
   retinaAttr: 'data-retina-src',
@@ -113,6 +115,27 @@ Note that `window` is assumed to be the container if this option is set to `null
 ```javascript
 var mtlazy = new Mtlazy({
   container: null
+});
+```
+
+### fade
+
+Should we fade in the image?
+
+```javascript
+var mtlazy = new Mtlazy({
+  fade: true
+});
+```
+
+### fade
+
+If fade is true, what duration? Defaults to 300ms.
+
+```javascript
+var mtlazy = new Mtlazy({
+  fade: true,
+  duration: 600
 });
 ```
 
