@@ -7,7 +7,7 @@ var packageJSON = require('./package.json');
 
 var banner = [
   '/*!',
-  ' * Layzr.js <%= pkg.version %> - <%= pkg.description %>',
+  ' * Mtlazy.js <%= pkg.version %> - <%= pkg.description %>',
   ' * Copyright (c) 2015 <%= pkg.author %> - http://callmecavs.github.io/layzr.js/',
   ' * License: <%= pkg.license %>',
   ' */',
@@ -28,14 +28,14 @@ var onError = function(error) {
 
 // concat and uglify scripts
 gulp.task('scripts', function() {
-  return gulp.src('src/layzr.js')
+  return gulp.src('src/mtlazy.js')
     .pipe(plugins.plumber({ errorHandler: onError }))
     .pipe(plugins.umd())
     .pipe(plugins.header(banner, { pkg: packageJSON }))
     .pipe(gulp.dest('dist'))
     .pipe(plugins.uglify({ preserveComments: 'some' }))
     .pipe(plugins.rename(function(path) {
-      path.basename = "layzr.min"
+      path.basename = "mtlazy.min"
     }))
     .pipe(gulp.dest('dist'));
 });
@@ -51,7 +51,7 @@ gulp.task('server', function() {
 
 // watch sass and js files
 gulp.task('watch', function() {
-  gulp.watch('src/layzr.js', ['scripts']);
+  gulp.watch('src/mtlazy.js', ['scripts']);
 });
 
 // build and default task

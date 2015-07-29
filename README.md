@@ -1,8 +1,6 @@
-# Layzr.js
+# MTLazy.js
 
-[![Layzr.js on NPM](https://img.shields.io/npm/v/layzr.js.svg)](https://www.npmjs.com/package/layzr.js) [![Layzr.js on Bower](https://img.shields.io/bower/v/layzr.js.svg)](http://bower.io/search/?q=layzr.js) [![Layzr.js on Gitter](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/callmecavs/layzr.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
-A small, fast, modern, and dependency-free library for lazy loading.
+A small, fast, modern, and dependency-free library for lazy loading. This is a fork of Layzr.js bringing in ie9 support and some other features we needed for service projects at MT.
 
 Lazy loading boosts page speed by deferring the loading of images until they're in (or near) the viewport. This library makes it completely painless - maximizing speed by keeping options to a minimum.
 
@@ -12,34 +10,18 @@ Lazy loading boosts page speed by deferring the loading of images until they're 
 
 Follow these steps:
 
-1. [Install](https://github.com/callmecavs/layzr.js#install)
-2. [Image Setup](https://github.com/callmecavs/layzr.js#image-setup)
-3. [Instance Creation](https://github.com/callmecavs/layzr.js#instance-creation)
+1. [Install](https://github.com/faction23/mtlazy.js#install)
+2. [Image Setup](https://github.com/faction23/mtlazy.js#image-setup)
+3. [Instance Creation](https://github.com/faction23/mtlazy.js#instance-creation)
 
 ### Install
 
 Load the script.
 
-[Download it](https://github.com/callmecavs/layzr.js/archive/master.zip), install it with [NPM](https://www.npmjs.com/package/layzr.js), or install it with [Bower](http://bower.io/search/?q=layzr.js).
+[Download it](https://github.com/faction23/mtlazy.js/archive/master.zip), install it with [NPM](https://www.npmjs.com/package/layzr.js), or install it with [Bower](http://bower.io/search/?q=mtlazy.js).
 
 ```html
-<script src="layzr.js"></script>
-```
-
-#### CDN
-
-The script is also available via CDN.
-
-In the examples below, replace `{version}` with your desired version. Refer to the [releases](https://github.com/callmecavs/layzr.js/releases) page for version info.
-
-##### [cdnjs](https://cdnjs.com/libraries/layzr.js)
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/layzr.js/{version}/layzr.min.js"></script>
-```
-
-##### [jsDelivr](http://www.jsdelivr.com/#!layzr.js)
-```html
-<script src="https://cdn.jsdelivr.net/layzr.js/{version}/layzr.min.js"></script>
+<script src="mtlazy.js"></script>
 ```
 
 ### Image Setup
@@ -47,8 +29,8 @@ In the examples below, replace `{version}` with your desired version. Refer to t
 For each `img` and/or `iframe` you want to lazy load, put the `src` in the `data-layzr` attribute.
 
 ```html
-<img data-layzr="image/source">
-<iframe data-layzr="media/source"></iframe>
+<img data-src="image/source">
+<iframe data-src="media/source"></iframe>
 ```
 
 This is the only _required_ attribute. Advanced, _optional_ configuration follows:
@@ -60,37 +42,37 @@ Include a placeholder, via the `src` attribute.
 Images without a placeholder - _before_ they're loaded - may impact layout (no width/height), or appear broken.
 
 ```html
-<img src="optional/placeholder" data-layzr="image/source">
+<img src="optional/placeholder" data-src="image/source">
 ```
 
 #### (Optional) Retina Support
 
-Include a retina (high-resolution) version of the image in the `data-layzr-retina` attribute. This source will only be loaded if the [devicePixelRatio](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio) is greater than 1.
+Include a retina (high-resolution) version of the image in the `data-retina-src` attribute. This source will only be loaded if the [devicePixelRatio](https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio) is greater than 1.
 
 Ensure the proper CSS is in place to display both regular and retina images correctly. This library handles the loading, but not the displaying, of elements.
 
 ```html
-<img data-layzr="image/source" data-layzr-retina="optional/retina/source">
+<img data-src="image/source" data-retina-src="optional/retina/source">
 ```
 
 #### (Optional) Background Images
 
-Include the `data-layzr-bg` attribute to load the source as a background image.
+Include the `data-bg-src` attribute to load the source as a background image.
 
-The `data-layzr-bg` attribute should be valueless - the image source is still taken from the `data-layzr` and `data-layzr-retina` attributes.
+The `data-bg-src` attribute should be valueless - the image source is still taken from the `data-src` and `data-retina-src` attributes.
 
 ```html
-<img data-layzr="image/source" data-layzr-bg>
+<img data-src="image/source" data-bg-src>
 ```
 
 #### (Optional) Hidden Images
 
-Include the `data-layzr-hidden` attribute to prevent an image from loading.
+Include the `data-hidden-src` attribute to prevent an image from loading.
 
 Removing this attribute _will not load the image_ - the user will still need to scroll, and the element will still need to be in the viewport.
 
 ```html
-<img data-layzr="image/source" data-layzr-hidden>
+<img data-src="image/source" data-hidden-src>
 ```
 
 ### Instance Creation
@@ -98,7 +80,7 @@ Removing this attribute _will not load the image_ - the user will still need to 
 Create a new instance, and that's it!
 
 ```javascript
-var layzr = new Layzr();
+var MTLazy = new Mtlazy();
 ```
 
 Documentation for all options follows:
@@ -108,13 +90,13 @@ Documentation for all options follows:
 Defaults shown below:
 
 ```javascript
-var layzr = new Layzr({
+var mtlazy = new Mtlazy({
   container: null,
-  selector: '[data-layzr]',
-  attr: 'data-layzr',
-  retinaAttr: 'data-layzr-retina',
-  bgAttr: 'data-layzr-bg',
-  hiddenAttr: 'data-layzr-hidden',
+  selector: '[data-src]',
+  attr: 'data-src',
+  retinaAttr: 'data-src-retina',
+  bgAttr: 'data-bg-src',
+  hiddenAttr: 'data-hidden-src',
   threshold: 0,
   callback: null
 });
@@ -129,7 +111,7 @@ Customize the container that holds the elements to lazy load - using CSS selecto
 Note that `window` is assumed to be the container if this option is set to `null`.
 
 ```javascript
-var layzr = new Layzr({
+var mtlazy = new Mtlazy({
   container: null
 });
 ```
@@ -139,8 +121,8 @@ var layzr = new Layzr({
 Customize the selector used to find elements to lazy load - using CSS selector syntax.
 
 ```javascript
-var layzr = new Layzr({
-  selector: '[data-layzr]'
+var mtlazy = new Mtlazy({
+  selector: '[data-src]'
 });
 ```
 
@@ -149,9 +131,9 @@ var layzr = new Layzr({
 Customize the data attributes that image sources are taken from.
 
 ```javascript
-var layzr = new Layzr({
-  attr: 'data-layzr',
-  retinaAttr: 'data-layzr-retina'
+var mtlazy = new Mtlazy({
+  attr: 'data-src',
+  retinaAttr: 'data-retina-src'
 });
 ```
 
@@ -160,8 +142,8 @@ var layzr = new Layzr({
 Customize the data attribute that loads images as a background.
 
 ```javascript
-var layzr = new Layzr({
-  bgAttr: 'data-layzr-bg'
+var mtlazy = new Mtlazy({
+  bgAttr: 'data-bg-src'
 });
 ```
 
@@ -170,8 +152,8 @@ var layzr = new Layzr({
 Customize the data attribute that prevents images from loading.
 
 ```javascript
-var layzr = new Layzr({
-  hiddenAttr: 'data-layzr-hidden'
+var mtlazy = new Mtlazy({
+  hiddenAttr: 'data-hidden-src'
 });
 ```
 
@@ -184,7 +166,7 @@ Threshold is a percentage of the viewport height - think of it as similar to the
 ```javascript
 // load images when they're half the viewport height away from the bottom of the viewport
 
-var layzr = new Layzr({
+var mtlazy = new Mtlazy({
   threshold: 50
 });
 ```
@@ -198,7 +180,7 @@ The image _may not be fully loaded before the function is called_. Detecting ima
 ```javascript
 // in the callback function, "this" refers to the image node
 
-var layzr = new Layzr({
+var mtlazy = new Mtlazy({
   callback: function() {
     this.classList.add('class');
   }
@@ -207,27 +189,11 @@ var layzr = new Layzr({
 
 ## Browser Support
 
-Layzr natively supports **IE10+**.
+Mtlazy natively supports **IE9+**.
 
-To add support for older browsers, consider including [Paul Irish's polyfill](https://gist.github.com/paulirish/1579671) for [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame).
-
-There are currently no plans to include the polyfill in the library, in the interest of file size.
-
-## Colophon
-
-* Site Design: [Chris Allen](https://dribbble.com/cp_allen)
-* Stock Photos: [Unsplash](https://unsplash.com/)
-* Heading Links: [heading-links.js](https://github.com/callmecavs/heading-links.js)
-* Google Analytics Isogram: [isogrammer](http://isogrammer.com/)
-* Inspiration: [Headroom.js](http://wicky.nillia.ms/headroom.js/), [jQuery Unveil](http://luis-almeida.github.io/unveil/)
-* Education: [Paul Lewis](http://www.html5rocks.com/en/tutorials/speed/animations/)
 
 ## License
 
 MIT. © 2015 Michael Cavalea
 
-## Roadmap
 
-- [x] Add to CDN?
-
-[![Built With Love](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)

@@ -1,23 +1,8 @@
-/*!
- * Layzr.js 1.4.2 - A small, fast, modern, and dependency-free library for lazy loading.
- * Copyright (c) 2015 Michael Cavalea - http://callmecavs.github.io/layzr.js/
- * License: MIT
- */
-
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define([], factory);
-  } else if (typeof exports === 'object') {
-    module.exports = factory();
-  } else {
-    root.Layzr = factory();
-  }
-}(this, function() {
 'use strict';
 
 // CONSTRUCTOR
 
-function Layzr(options) {
+function Mtlazy(options) {
   // debounce
   this._lastScroll = 0;
   this._ticking    = false;
@@ -26,11 +11,11 @@ function Layzr(options) {
   options = options || {};
 
   this._optionsContainer  = document.querySelector(options.container) || window;
-  this._optionsSelector   = options.selector || '[data-layzr]';
-  this._optionsAttr       = options.attr || 'data-layzr';
-  this._optionsAttrRetina = options.retinaAttr || 'data-layzr-retina';
-  this._optionsAttrBg     = options.bgAttr || 'data-layzr-bg';
-  this._optionsAttrHidden = options.hiddenAttr || 'data-layzr-hidden';
+  this._optionsSelector   = options.selector || '.lazyload';
+  this._optionsAttr       = options.attr || 'data-src';
+  this._optionsAttrRetina = options.retinaAttr || 'data-retina-src';
+  this._optionsAttrBg     = options.bgAttr || 'data-bg-src';
+  this._optionsAttrHidden = options.hiddenAttr || 'data-hidden-src';
   this._optionsThreshold  = options.threshold || 0;
   this._optionsCallback   = options.callback || null;
 
@@ -51,7 +36,7 @@ function Layzr(options) {
 // DEBOUNCE HELPERS
 // adapted from: http://www.html5rocks.com/en/tutorials/speed/animations/
 
-Layzr.prototype._requestScroll = function() {
+Mtlazy.prototype._requestScroll = function() {
   if(this._optionsContainer === window) {
     this._lastScroll = window.pageYOffset;
   }
@@ -62,7 +47,7 @@ Layzr.prototype._requestScroll = function() {
   this._requestTick();
 };
 
-Layzr.prototype._requestTick = function() {
+Mtlazy.prototype._requestTick = function() {
   if(!this._ticking) {
     requestAnimationFrame(this.update.bind(this));
     this._ticking = true;
@@ -72,20 +57,20 @@ Layzr.prototype._requestTick = function() {
 // OFFSET HELPER
 // remember, getBoundingClientRect is relative to the viewport
 
-Layzr.prototype._getOffset = function(node) {
+Mtlazy.prototype._getOffset = function(node) {
   return node.getBoundingClientRect().top + window.pageYOffset;
 };
 
 // HEIGHT HELPER
 
-Layzr.prototype._getContainerHeight = function() {
+Mtlazy.prototype._getContainerHeight = function() {
   return this._optionsContainer.innerHeight
       || this._optionsContainer.offsetHeight;
 }
 
-// LAYZR METHODS
+// Mtlazy METHODS
 
-Layzr.prototype._create = function() {
+Mtlazy.prototype._create = function() {
   // fire scroll event once
   this._handlerBind();
 
@@ -94,13 +79,13 @@ Layzr.prototype._create = function() {
   this._optionsContainer.addEventListener('resize', this._handlerBind, false);
 };
 
-Layzr.prototype._destroy = function() {
+Mtlazy.prototype._destroy = function() {
   // unbind scroll and resize event
   this._optionsContainer.removeEventListener('scroll', this._handlerBind, false);
   this._optionsContainer.removeEventListener('resize', this._handlerBind, false);
 };
 
-Layzr.prototype._inViewport = function(node) {
+Mtlazy.prototype._inViewport = function(node) {
   // get viewport top and bottom offset
   var viewportTop = this._lastScroll;
   var viewportBottom = viewportTop + this._getContainerHeight();
@@ -118,7 +103,7 @@ Layzr.prototype._inViewport = function(node) {
       && !node.hasAttribute(this._optionsAttrHidden);
 };
 
-Layzr.prototype._reveal = function(node) {
+Mtlazy.prototype._reveal = function(node) {
   // get node source
   var source = node.getAttribute(this._srcAttr) || node.getAttribute(this._optionsAttr);
 
@@ -143,12 +128,12 @@ Layzr.prototype._reveal = function(node) {
   node.removeAttribute(this._optionsAttrHidden);
 };
 
-Layzr.prototype.updateSelector = function() {
+Mtlazy.prototype.updateSelector = function() {
   // update cached list of nodes matching selector
   this._nodes = document.querySelectorAll(this._optionsSelector);
 };
 
-Layzr.prototype.update = function() {
+Mtlazy.prototype.update = function() {
   // cache nodelist length
   var nodesLength = this._nodes.length;
 
@@ -170,6 +155,3 @@ Layzr.prototype.update = function() {
   // allow for more animation frames
   this._ticking = false;
 };
-
-return Layzr;
-}));

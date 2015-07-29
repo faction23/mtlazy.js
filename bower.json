@@ -1,16 +1,16 @@
 {
-  "name":        "layzr.js",
-  "version":     "1.4.3",
+  "name":        "mtlazy.js",
+  "version":     "2.0.0",
   "description": "A small, fast, modern, and dependency-free library for lazy loading.",
-  "homepage":    "http://callmecavs.github.io/layzr.js/",
-  "main":        ["dist/layzr.js"],
+  "homepage":    "https://github.com/faction23/mtlazy.js/",
+  "main":        ["dist/mtlazy.js"],
 
-  "author":  ["Michael Cavalea <callmecavs@gmail.com>"],
+  "author":  ["Michael Cavalea <callmecavs@gmail.com>", "Samuel Estok <sam@tri.be>"],
   "license": "MIT",
 
   "repository": {
     "type": "git",
-    "url":  "https://github.com/callmecavs/layzr.js.git"
+    "url":  "https://github.com/faction23/mtlazy.js.git"
   },
 
   "keywords": [
