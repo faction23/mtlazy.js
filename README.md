@@ -4,10 +4,10 @@ A small, fast, modern, and dependency-free library for lazy loading. This is a f
 
 Features in MTLazy not in Lazyr:
 
-IE9 support.
-Mobile image support allowing for an additional image targeting mobiles at a configurable breakpoint.
-CSS fadein support and configurable duration.
-Some additional config options listed below
+1. IE9 support.
+2. Mobile image support allowing for an additional image targeting mobiles at a configurable breakpoint.
+3. CSS fadein support and configurable duration.
+4. Some additional config options listed below
 
 ## Usage
 
