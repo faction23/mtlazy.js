@@ -2,9 +2,12 @@
 
 A small, fast, modern, and dependency-free library for lazy loading. This is a fork of Layzr.js bringing in ie9 support and some other features we needed for service projects at MT. 
 
-Lazy loading boosts page speed by deferring the loading of images until they're in (or near) the viewport. This library makes it completely painless - maximizing speed by keeping options to a minimum.
+Features in MTLazy not in Lazyr:
 
-Check the demo directory for an example.
+IE9 support.
+Mobile image support allowing for an additional image targeting mobiles at a configurable breakpoint.
+CSS fadein support and configurable duration.
+Some additional config options listed below
 
 ## Usage
 
@@ -18,7 +21,7 @@ Follow these steps:
 
 Load the script.
 
-[Download it](https://github.com/faction23/mtlazy.js/archive/master.zip), install it with [NPM](https://www.npmjs.com/package/layzr.js), or install it with [Bower](http://bower.io/search/?q=mtlazy.js).
+[Download it](https://github.com/faction23/mtlazy.js/archive/master.zip), install it with [NPM](https://www.npmjs.com/package/mtlazy), or install it with [Bower](http://bower.io/search/?q=mtlazy.js).
 
 ```html
 <script src="mtlazy.js"></script>
@@ -26,10 +29,10 @@ Load the script.
 
 ### Image Setup
 
-For each `img` and/or `iframe` you want to lazy load, put the `src` in the `data-layzr` attribute.
+For each `img` and/or `iframe` you want to lazy load, put the `src` in the `data-src` attribute, and the class "lazyload".
 
 ```html
-<img data-src="image/source">
+<img class="lazyload" data-src="image/source">
 <iframe data-src="media/source"></iframe>
 ```
 
@@ -55,6 +58,14 @@ Ensure the proper CSS is in place to display both regular and retina images corr
 <img data-src="image/source" data-retina-src="optional/retina/source">
 ```
 
+#### (Optional) Mobile Image support
+
+Include a mobile version of the image in the `data-mobile-src` attribute. This source will only be loaded if the window.innerWidth is less than the mobile threshold, which defaults to 768 but is configurable.
+
+```html
+<img data-src="image/source" data-mobile-src="optional/mobile/source">
+```
+
 #### (Optional) Background Images
 
 Include the `data-bg-src` attribute to load the source as a background image.
@@ -62,7 +73,7 @@ Include the `data-bg-src` attribute to load the source as a background image.
 The `data-bg-src` attribute should be valueless - the image source is still taken from the `data-src` and `data-retina-src` attributes.
 
 ```html
-<img data-src="image/source" data-bg-src>
+<div data-src="image/source" data-bg-src>
 ```
 
 #### (Optional) Hidden Images
@@ -85,21 +96,24 @@ var mtlazy = new Mtlazy();
 
 Documentation for all options follows:
 
-## Options
+## All Options
 
 Defaults shown below:
 
 ```javascript
 var mtlazy = new Mtlazy({
-  container: null,
-  fade: false,
-  duration: 300,
-  selector: '[data-src]',
-  attr: 'data-src',
-  retinaAttr: 'data-retina-src',
-  bgAttr: 'data-bg-src',
-  hiddenAttr: 'data-hidden-src',
-  threshold: 0,
+  container: null, // can be any container, defaults to document
+  fade: false, // use css fadein?
+  duration: 300, // fadein duration
+  selector: '.lazyload', // customize the css selector mtlazy operates on
+  attr: 'data-src', // the regular/only image
+  retinaAttr: 'data-retina-src', // the optional retina variant attribute name
+  mobileAttr: 'data-mobile-src', // the optional mobilevariant attribute name
+  bgAttr: 'data-bg-src', // attr that triggers bg image lazyloading
+  hiddenAttr: 'data-hidden-src', // stay hidden?
+  threshold: 0, // viewport threshold
+  clean: false, // cleanup attributes after load?
+  breakpoint: 768,
   callback: null
 });
 ```
@@ -145,7 +159,7 @@ Customize the selector used to find elements to lazy load - using CSS selector s
 
 ```javascript
 var mtlazy = new Mtlazy({
-  selector: '[data-src]'
+  selector: '.lazyload'
 });
 ```
 
@@ -156,7 +170,8 @@ Customize the data attributes that image sources are taken from.
 ```javascript
 var mtlazy = new Mtlazy({
   attr: 'data-src',
-  retinaAttr: 'data-retina-src'
+  retinaAttr: 'data-retina-src',
+  mobileAttr: 'data-mobile-src'
 });
 ```
 
@@ -191,6 +206,26 @@ Threshold is a percentage of the viewport height - think of it as similar to the
 
 var mtlazy = new Mtlazy({
   threshold: 50
+});
+```
+
+### clean
+
+If clean is true, clean up attributes after image has loaded
+
+```javascript
+var mtlazy = new Mtlazy({
+  clean: false
+});
+```
+
+### breakpoint
+
+If supplying a mobile image, at what breakpoint should it use?
+
+```javascript
+var mtlazy = new Mtlazy({
+  breakpoint:768
 });
 ```
 

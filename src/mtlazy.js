@@ -15,11 +15,14 @@ function Mtlazy(options) {
   this._optionsFadeDuration = options.duration || 300;
   this._optionsSelector     = options.selector || '.lazyload';
   this._optionsAttr         = options.attr || 'data-src';
+  this._optionsMobileAttr   = options.mobileAttr || 'data-mobile-src';
   this._optionsAttrRetina   = options.retinaAttr || 'data-retina-src';
   this._optionsAttrBg       = options.bgAttr || 'data-bg-src';
   this._optionsAttrHidden   = options.hiddenAttr || 'data-hidden-src';
   this._optionsThreshold    = options.threshold || 0;
   this._optionsCallback     = options.callback || null;
+  this._mobileBreakpoint    = options.breakpoint || 768;
+  this._optionsCleanUp      = options.clean || false;
 
   // properties
   this._retina  = window.devicePixelRatio > 1;
@@ -79,6 +82,14 @@ Mtlazy.prototype._create = function() {
   // fire scroll event once
   this._handlerBind();
 
+  this._maybeSetOpacity();
+
+  // bind scroll and resize event
+  this._optionsContainer.addEventListener('scroll', this._handlerBind, false);
+  this._optionsContainer.addEventListener('resize', this._handlerBind, false);
+};
+
+Mtlazy.prototype._maybeSetOpacity = function() {
   // if fade set them to opacity 0
   if( this._optionsFade ){
     var nodes = this._nodes;
@@ -93,10 +104,6 @@ Mtlazy.prototype._create = function() {
                 'opacity ' + dur + 'ms ease-in';
     }
   }
-
-  // bind scroll and resize event
-  this._optionsContainer.addEventListener('scroll', this._handlerBind, false);
-  this._optionsContainer.addEventListener('resize', this._handlerBind, false);
 };
 
 Mtlazy.prototype._destroy = function() {
@@ -125,14 +132,23 @@ Mtlazy.prototype._inViewport = function(node) {
 
 Mtlazy.prototype._reveal = function(node) {
   // get node source
-  var source = node.getAttribute(this._srcAttr) || node.getAttribute(this._optionsAttr);
-
-  // set node src or bg image
-  if(node.hasAttribute(this._optionsAttrBg)) {
-    node.style.backgroundImage = 'url(' + source + ')';
+  var source;
+  if( node.getAttribute( this._optionsMobileAttr ) && window.innerWidth < this._mobileBreakpoint ){
+    source = node.getAttribute(this._optionsMobileAttr);
+  } else {
+    source = node.getAttribute(this._srcAttr) || node.getAttribute(this._optionsAttr);
   }
-  else {
-    node.setAttribute('src', source);
+
+  if(this._optionsFade && ! node.hasAttribute(this._optionsAttrBg)){
+    this.setUpFadeIn(node, source);
+  } else {
+    // set node src or bg image
+    if(node.hasAttribute(this._optionsAttrBg)) {
+      node.style.backgroundImage = 'url(' + source + ')';
+    }
+    else {
+      node.setAttribute('src', source);
+    }
   }
 
   // call the callback
@@ -141,18 +157,35 @@ Mtlazy.prototype._reveal = function(node) {
     this._optionsCallback.call(node);
   }
 
-  // remove node data attributes
-  node.removeAttribute(this._optionsAttr);
-  node.removeAttribute(this._optionsAttrRetina);
-  node.removeAttribute(this._optionsAttrBg);
-  node.removeAttribute(this._optionsAttrHidden);
-
-  if( this._optionsFade ){
-    setTimeout( function(){
-      node.style.opacity = 1;
-    }, 150 );
+  if(this._optionsCleanUp){
+    // remove node data attributes
+    node.removeAttribute(this._optionsMobileAttr);
+    node.removeAttribute(this._optionsAttr);
+    node.removeAttribute(this._optionsAttrRetina);
+    node.removeAttribute(this._optionsAttrBg);
+    node.removeAttribute(this._optionsAttrHidden);
   }
 
+};
+
+Mtlazy.prototype.setUpFadeIn = function( node, source ) {
+
+  this.imgLoaded = false;
+
+  node.onload = this.fadeInHandler( node );
+  node.src = source;
+
+  if (node.complete) {
+    this.fadeInHandler( node );
+  }
+};
+
+Mtlazy.prototype.fadeInHandler = function( node ) {
+  if (this.imgLoaded) {
+    return;
+  }
+  this.imgLoaded = true;
+  node.style.opacity = '1';
 };
 
 Mtlazy.prototype.updateSelector = function() {

@@ -1,6 +1,6 @@
 {
   "name":        "mtlazy",
-  "version":     "2.0.1",
+  "version":     "2.0.2",
   "description": "A small, fast, modern, and dependency-free library for lazy loading.",
   "homepage":    "https://github.com/faction23/mtlazy.js/",
   "main":        ["dist/mtlazy.js"],

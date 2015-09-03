@@ -1,5 +1,5 @@
 (function (window) {
-  var mtlazy = new Mtlazy({
+  new Mtlazy({
     fade: true
   });
 })(window);
