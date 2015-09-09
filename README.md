@@ -112,7 +112,6 @@ var mtlazy = new Mtlazy({
   bgAttr: 'data-bg-src', // attr that triggers bg image lazyloading
   hiddenAttr: 'data-hidden-src', // stay hidden?
   threshold: 0, // viewport threshold
-  clean: false, // cleanup attributes after load?
   breakpoint: 768,
   callback: null
 });
@@ -206,16 +205,6 @@ Threshold is a percentage of the viewport height - think of it as similar to the
 
 var mtlazy = new Mtlazy({
   threshold: 50
-});
-```
-
-### clean
-
-If clean is true, clean up attributes after image has loaded
-
-```javascript
-var mtlazy = new Mtlazy({
-  clean: false
 });
 ```
 

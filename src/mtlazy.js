@@ -22,7 +22,6 @@ function Mtlazy(options) {
   this._optionsThreshold    = options.threshold || 0;
   this._optionsCallback     = options.callback || null;
   this._mobileBreakpoint    = options.breakpoint || 768;
-  this._optionsCleanUp      = options.clean || false;
 
   // properties
   this._retina  = window.devicePixelRatio > 1;
@@ -139,7 +138,7 @@ Mtlazy.prototype._reveal = function(node) {
     source = node.getAttribute(this._srcAttr) || node.getAttribute(this._optionsAttr);
   }
 
-  if(this._optionsFade && ! node.hasAttribute(this._optionsAttrBg)){
+  if(this._optionsFade){
     this.setUpFadeIn(node, source);
   } else {
     // set node src or bg image
@@ -157,20 +156,23 @@ Mtlazy.prototype._reveal = function(node) {
     this._optionsCallback.call(node);
   }
 
-  if(this._optionsCleanUp){
-    // remove node data attributes
-    node.removeAttribute(this._optionsMobileAttr);
-    node.removeAttribute(this._optionsAttr);
-    node.removeAttribute(this._optionsAttrRetina);
-    node.removeAttribute(this._optionsAttrBg);
-    node.removeAttribute(this._optionsAttrHidden);
-  }
+  node.removeAttribute(this._optionsMobileAttr);
+  node.removeAttribute(this._optionsAttr);
+  node.removeAttribute(this._optionsAttrRetina);
+  node.removeAttribute(this._optionsAttrBg);
+  node.removeAttribute(this._optionsAttrHidden);
 
 };
 
 Mtlazy.prototype.setUpFadeIn = function( node, source ) {
 
-  this.imgLoaded = false;
+  this.loaded = false;
+
+  if(node.hasAttribute(this._optionsAttrBg)) {
+    node.style.backgroundImage = 'url(' + source + ')';
+    this.fadeInHandler( node );
+    return;
+  }
 
   node.onload = this.fadeInHandler( node );
   node.src = source;
@@ -181,10 +183,10 @@ Mtlazy.prototype.setUpFadeIn = function( node, source ) {
 };
 
 Mtlazy.prototype.fadeInHandler = function( node ) {
-  if (this.imgLoaded) {
+  if (this.loaded) {
     return;
   }
-  this.imgLoaded = true;
+  this.loaded = true;
   node.style.opacity = '1';
 };
 
